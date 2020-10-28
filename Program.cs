@@ -23,8 +23,6 @@ namespace DictionaryBackup
 
             PrintMessage("Backup started.");
             Backup().GetAwaiter().GetResult();
-
-            Console.WriteLine($"{_oAuthToken}");
         }
 
         static async Task Backup()
