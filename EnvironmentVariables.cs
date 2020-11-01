@@ -1,6 +1,6 @@
 using System;
 
-namespace DictionaryBackup
+namespace YandexDiskSingleFileBackup
 {
     public class EnvironmentVariables
     {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace DictionaryBackup
+namespace YandexDiskSingleFileBackup
 {
     class Program
     {

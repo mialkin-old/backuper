@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace DictionaryBackup
+namespace YandexDiskSingleFileBackup
 {
     public class Backuper
     {
@@ -25,8 +25,6 @@ namespace DictionaryBackup
         public async Task Backup()
         {
             _printer.Print("Backup started.");
-
-            string todayDate = DateTime.Now.ToString("yyyy-MM-dd");
 
             Client.DefaultRequestHeaders.Clear();
             Client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -56,8 +54,7 @@ namespace DictionaryBackup
 
         public string GetUploadPath()
         {
-            return Path.Combine("resources/upload?path=", _env.DestinationFolderPath,
-                $"{DateTime.Now:yyyy-MM-dd}-{_env.DestinationFileName}");
+            return Path.Combine("resources/upload?path=", _env.DestinationFolderPath, $"{DateTime.Now:yyyy-MM-dd}-{_env.DestinationFileName}");
         }
     }
 }
