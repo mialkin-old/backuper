@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexDiskSingleFileBackup", "YandexDiskSingleFileBackup.csproj", "{A14C4B32-60CC-4247-AB00-315001E79134}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{689AAE4B-6BA7-4083-AE9D-6529E186861A}"
+ProjectSection(SolutionItems) = preProject
+	yandex oauth.md = yandex oauth.md
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

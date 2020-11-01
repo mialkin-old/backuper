@@ -24,11 +24,6 @@ namespace YandexDiskSingleFileBackup
         /// </summary>
         public string YandexDiskFolderPath { get; set; } = Get("YANDEX_DISK_FOLDER_PATH");
 
-        /// <summary>
-        /// Имя файла резервной копии.
-        /// </summary>
-        public string DestinationFileName { get; set; } = Get("DESTINATION_FILE_NAME");
-
         private static string Get(string name)
         {
             string? variable = Environment.GetEnvironmentVariable(name);
