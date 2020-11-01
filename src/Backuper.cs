@@ -62,6 +62,7 @@ namespace Backuper
         {
             string filePath = Path.Combine(_env.SourceFolderPath, _env.SourceFileName);
             byte[]? sourceFileBytes = await File.ReadAllBytesAsync(filePath);
+            _printer.Print($"File size is {sourceFileBytes.Length / 1024} KB.");
 
             HttpResponseMessage uploadResponse =
                 await Client.PutAsync(yandexDiskLinkForUpload, new ByteArrayContent(sourceFileBytes, 0, sourceFileBytes.Length));
