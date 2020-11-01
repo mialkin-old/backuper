@@ -22,7 +22,7 @@ namespace YandexDiskSingleFileBackup
         /// <summary>
         /// Путь до папки на Яндекс.Диске, в которую нужно сохранить резервную копию.
         /// </summary>
-        public string DestinationFolderPath { get; set; } = Get("DESTINATION_FOLDER_PATH");
+        public string YandexDiskFolderPath { get; set; } = Get("YANDEX_DISK_FOLDER_PATH");
 
         /// <summary>
         /// Имя файла резервной копии.

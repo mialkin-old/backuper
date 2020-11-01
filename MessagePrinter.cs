@@ -6,7 +6,7 @@ namespace YandexDiskSingleFileBackup
     {
         public void Print(string message)
         {
-            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd--HH-mm-ss} — {message}");
+            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} — {message}");
         }
     }
 }
