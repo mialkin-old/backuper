@@ -41,7 +41,7 @@ namespace YandexDiskSingleFileBackup
         private async Task<string> GetYandexDiskLinkForUpload()
         {
             string uploadPath = Path.Combine("resources/upload?path=", _env.YandexDiskFolderPath,
-                $"{DateTime.Now:yyyy-MM-dd}-{_env.SourceFileName}");
+                $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_env.SourceFileName}");
 
             HttpResponseMessage response = await Client.GetAsync(uploadPath);
             response.EnsureSuccessStatusCode();
