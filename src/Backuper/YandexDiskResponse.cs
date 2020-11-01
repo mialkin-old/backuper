@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace YandexDiskSingleFileBackup
+namespace Backuper
 {
     public class YandexDiskResponse
     {

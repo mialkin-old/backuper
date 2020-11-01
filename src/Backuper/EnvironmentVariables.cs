@@ -1,6 +1,6 @@
 using System;
 
-namespace YandexDiskSingleFileBackup
+namespace Backuper
 {
     public class EnvironmentVariables
     {
