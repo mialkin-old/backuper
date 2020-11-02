@@ -8,64 +8,56 @@ namespace Backuper
 {
     public class Backuper
     {
-        private readonly EnvironmentVariables _env;
-        private readonly MessagePrinter _printer;
-
         private static readonly HttpClient Client = new HttpClient
         {
-            BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/"),
+            BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/")
         };
 
-        public Backuper(EnvironmentVariables env, MessagePrinter printer)
+        public Backuper(string oauthToken)
         {
-            _env = env;
-            _printer = printer;
-
             Client.DefaultRequestHeaders.Add("Accept", "application/json");
-            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {_env.OauthToken}");
-        }
-
-        public async Task Backup()
-        {
-            _printer.Print("Starting backup.");
-            _printer.Print("Getting upload link.");
-            string yandexDiskLinkForUpload = await GetYandexDiskLinkForUpload();
-            _printer.Print("Uploading file.");
-            await Upload(yandexDiskLinkForUpload);
-            _printer.Print("Backup is finished.");
+            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {oauthToken}");
         }
 
         /// <summary>
         /// Запрашивает у Яндекс.Диска ссылку, по которой можно будет выгрузить файл.
         /// </summary>
-        private async Task<string> GetYandexDiskLinkForUpload()
+        /// <param name="directoryPath">Полный путь до директории на Яндекс.Диске, в которую нужно загрузить файл.</param>
+        /// <param name="filename">Название, которое будет у загруженного на Яндекс.Диск файла.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<string> GetYandexDiskUploadLink(string directoryPath, string filename)
         {
-            string uploadPath = Path.Combine("resources/upload?path=", _env.YandexDiskFolderPath,
-                $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_env.SourceFileName}");
+            string uploadPath = Path.Combine("resources/upload?path=", directoryPath, filename);
 
-            HttpResponseMessage response = await Client.GetAsync(uploadPath);
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage responseMessage = await Client.GetAsync(uploadPath);
+            responseMessage.EnsureSuccessStatusCode();
 
-            string jsonString = await response.Content.ReadAsStringAsync();
-            YandexDiskResponse? yandexDiskResponse = JsonSerializer.Deserialize<YandexDiskResponse>(jsonString);
+            string jsonString = await responseMessage.Content.ReadAsStringAsync();
+            YandexDiskResponse? response = JsonSerializer.Deserialize<YandexDiskResponse>(jsonString);
 
-            if (string.IsNullOrEmpty(yandexDiskResponse?.Link))
-                throw new ArgumentNullException(nameof(yandexDiskResponse.Link));
+            if (string.IsNullOrEmpty(response?.Link))
+                throw new ArgumentNullException(nameof(response.Link));
 
-            return yandexDiskResponse.Link;
+            return response.Link;
         }
 
         /// <summary>
         /// Выгружает файл на Яндекс.Диск.
         /// </summary>
-        private async Task Upload(string yandexDiskLinkForUpload)
+        /// <param name="uploadLink">Ссылка по которой нужно выгружать файл.</param>
+        /// <param name="fileBytes">Файл для выгрузки.</param>
+        /// <returns></returns>
+        public async Task UploadFile(string uploadLink, byte[] fileBytes)
         {
-            string filePath = Path.Combine(_env.SourceFolderPath, _env.SourceFileName);
-            byte[]? sourceFileBytes = await File.ReadAllBytesAsync(filePath);
-            _printer.Print($"File size is {sourceFileBytes.Length / 1024} KB.");
-
+            if(string.IsNullOrEmpty(uploadLink))
+                throw new ArgumentNullException(uploadLink);
+            
+            if (fileBytes.Length == 0)
+                throw new ArgumentException("Размер выгружаемого файла должен быть больше 0 байт.");
+                    
             HttpResponseMessage uploadResponse =
-                await Client.PutAsync(yandexDiskLinkForUpload, new ByteArrayContent(sourceFileBytes, 0, sourceFileBytes.Length));
+                await Client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
             uploadResponse.EnsureSuccessStatusCode();
         }
     }
