@@ -11,18 +11,21 @@ namespace Backuper
             var env = new EnvironmentVariables();
             var backuper = new Backuper(env.OauthToken);
             
-            Print("Reading file from disk.");
+            Print("Start backup.");
+            Print("Start reading file from disk.");
             string filePath = Path.Combine(env.SourceFolderPath, env.SourceFileName);
             byte[]? fileBytes = await File.ReadAllBytesAsync(filePath);
-            Print($"File size is {fileBytes.Length / 1024} KB.");
+            Print($"File has been read. File size: {fileBytes.Length / 1024} KB.");
 
-            Print("Getting upload link.");
+            Print("Start getting upload link.");
             string uploadLink = await backuper.GetYandexDiskUploadLink(env.YandexDiskFolderPath, 
                 $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {env.SourceFileName}");
-            
-            Print("Uploading file.");
+            Print("Upload link has been received.");
+
+            Print("Start uploading file.");
             await backuper.UploadFile(uploadLink, fileBytes);
-            Print("Finished.");
+            Print("File has been uploaded.");
+            Print("Backup is finished.");
         }
 
         private static void Print(string message)
