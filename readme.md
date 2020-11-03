@@ -18,3 +18,6 @@ YANDEX_DISK_FOLDER_PATH=Backup/picture-collection
 ```
 SOURCE_FILE_NAME="my picture.jpg"
 ```
+
+## Как запустить приложение
+
