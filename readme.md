@@ -8,7 +8,7 @@
 
 1\. Установите [Docker Desktop](https://docs.docker.com/get-docker/) у себя на копьютере.
 
-2\. Создайте новую папку `diskbackup` и сохраните внутри нее файл `docker-compose.yml` со следующим содержимым:
+2\. Создайте новую папку `backuper` и сохраните внутри нее файл `docker-compose.yml` со следующим содержимым:
 
 ```text
 version: "3.8"
