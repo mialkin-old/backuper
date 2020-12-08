@@ -1,21 +1,24 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Backuper.FileReader;
+using Microsoft.Extensions.Hosting;
 
 namespace Backuper
 {
     class Program
     {
+        public string OperationId { get; } = Guid.NewGuid().ToString()[^4..];
         static async Task Main(string[] args)
         {
+            using IHost host = CreateHostBuilder(args).Build();
+            
             var env = new EnvironmentVariables();
             var backuper = new Backuper(env.OauthToken);
             
-            Print("Start backup.");
-            Print("Start reading file from disk.");
-            string filePath = Path.Combine(env.SourceFolderPath, env.SourceFileName);
-            byte[]? fileBytes = await File.ReadAllBytesAsync(filePath);
-            Print($"File has been read. File size: {fileBytes.Length / 1024} KB.");
+            IFileReader fl = new FileReader.FileReader();
+            
+            byte[] fileBytes = await fl.ReadFileAsync(Path.Combine(env.SourceFolderPath, env.SourceFileName));
 
             Print("Start getting upload link.");
             string uploadLink = await backuper.GetYandexDiskUploadLink(env.YandexDiskFolderPath, 
@@ -26,7 +29,12 @@ namespace Backuper
             await backuper.UploadFile(uploadLink, fileBytes);
             Print("File has been uploaded.");
             Print("Backup is finished.");
+
+            await host.RunAsync();
         }
+
+        static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args);
 
         private static void Print(string message)
         {
