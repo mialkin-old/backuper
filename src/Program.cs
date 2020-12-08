@@ -2,31 +2,34 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using YandexDiskFileUploader.FileReader;
+using YandexDiskFileUploader.Implementations;
+using YandexDiskFileUploader.Interfaces;
 
 namespace YandexDiskFileUploader
 {
     class Program
     {
         public string OperationId { get; } = Guid.NewGuid().ToString()[^4..];
+
         static async Task Main(string[] args)
         {
             using IHost host = CreateHostBuilder(args).Build();
-            
-            var env = new EnvironmentVariables();
-            var backuper = new Backuper(env.OauthToken);
-            
-            IFileReader fl = new FileReader.FileReader();
-            
-            byte[] fileBytes = await fl.ReadFileAsync(Path.Combine(env.SourceFolderPath, env.SourceFileName));
+
+            EnvironmentVariables env = new();
+
+            IFileReader fileReader = new FileReader();
+
+            byte[] fileBytes = await fileReader.ReadFileAsync(Path.Combine(env.SourceFolderPath, env.SourceFileName));
+
+            IFileUploader fileUploader = new FileUploader(env.OauthToken);
 
             Print("Start getting upload link.");
-            string uploadLink = await backuper.GetYandexDiskUploadLink(env.YandexDiskFolderPath, 
+            string uploadLink = await fileUploader.GetYandexDiskUploadLinkAsync(env.YandexDiskFolderPath,
                 $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {env.SourceFileName}");
             Print("Upload link has been received.");
 
             Print("Start uploading file.");
-            await backuper.UploadFile(uploadLink, fileBytes);
+            await fileUploader.UploadFileAsync(uploadLink, fileBytes);
             Print("File has been uploaded.");
             Print("Backup is finished.");
 

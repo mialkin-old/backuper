@@ -1,8 +1,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using YandexDiskFileUploader.Interfaces;
 
-namespace YandexDiskFileUploader.FileReader
+namespace YandexDiskFileUploader.Implementations
 {
     public class FileReader : IFileReader
     {

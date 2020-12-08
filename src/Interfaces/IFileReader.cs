@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace YandexDiskFileUploader.FileReader
+namespace YandexDiskFileUploader.Interfaces
 {
     public interface IFileReader
     {
