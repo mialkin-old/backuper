@@ -8,7 +8,7 @@ namespace YandexDiskFileUploader
         /// OAuth token from the <see href="https://oauth.yandex.com">application</see> registered on Yandex's OAuth server.
         /// </summary>
         public string OauthToken { get; } = Get("OAUTH_TOKEN");
-        
+
         /// <summary>
         /// Path to the directory with the file to upload.
         /// </summary>
