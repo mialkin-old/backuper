@@ -21,15 +21,15 @@ namespace YandexDiskFileUploader
 
             byte[] fileBytes = await fileReader.ReadFileAsync(Path.Combine(env.SourceFolderPath, env.SourceFileName));
 
-            IFileUploader fileUploader = new FileUploader(env.OauthToken);
+            IYandexDiskFileUploader yandexDiskFileUploader = new DefaultFileUploader(env.OauthToken);
 
             Print("Start getting upload link.");
-            string uploadLink = await fileUploader.GetYandexDiskUploadLinkAsync(env.YandexDiskFolderPath,
+            string uploadLink = await yandexDiskFileUploader.GetUploadLinkAsync(env.UploadDirectoryPath,
                 $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {env.SourceFileName}");
             Print("Upload link has been received.");
 
             Print("Start uploading file.");
-            await fileUploader.UploadFileAsync(uploadLink, fileBytes);
+            await yandexDiskFileUploader.UploadFileAsync(uploadLink, fileBytes);
             Print("File has been uploaded.");
             Print("Backup is finished.");
 

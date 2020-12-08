@@ -5,30 +5,30 @@ namespace YandexDiskFileUploader
     public class EnvironmentVariables
     {
         /// <summary>
-        /// OAuth-токен зарегистрированного на Яндекс.Диске <see href="https://oauth.yandex.ru"/>приложения</>.
+        /// OAuth token from the <see href="https://oauth.yandex.com">application</see> registered on Yandex's OAuth server.
         /// </summary>
         public string OauthToken { get; } = Get("OAUTH_TOKEN");
-
+        
         /// <summary>
-        /// Путь до папки с файлом, который нужно сохранить.
+        /// Path to the directory with the file to upload.
         /// </summary>
         public string SourceFolderPath { get; set; } = Get("SOURCE_FOLDER_PATH");
 
         /// <summary>
-        /// Имя файла, который нужно сохранить.
+        /// Name of the file to upload.
         /// </summary>
         public string SourceFileName { get; set; } = Get("SOURCE_FILE_NAME");
 
         /// <summary>
-        /// Путь до папки на Яндекс.Диске, в которую нужно сохранить резервную копию.
+        /// Path to upload directory on Yandex.Disk.
         /// </summary>
-        public string YandexDiskFolderPath { get; set; } = Get("YANDEX_DISK_FOLDER_PATH");
+        public string UploadDirectoryPath { get; set; } = Get("YANDEX_DISK_FOLDER_PATH");
 
         private static string Get(string name)
         {
             string? variable = Environment.GetEnvironmentVariable(name);
             if (string.IsNullOrEmpty(variable))
-                throw new ArgumentNullException($"Не задана переменная окружения {name}.");
+                throw new ArgumentNullException($"Environment variable {name} is not set.");
 
             return variable;
         }

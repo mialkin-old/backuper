@@ -7,22 +7,22 @@ using YandexDiskFileUploader.Interfaces;
 
 namespace YandexDiskFileUploader.Implementations
 {
-    public class FileUploader : IFileUploader
+    public class DefaultFileUploader : IYandexDiskFileUploader
     {
         private static readonly HttpClient Client = new HttpClient
         {
             BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/")
         };
 
-        public FileUploader(string oauthToken)
+        public DefaultFileUploader(string oauthToken)
         {
             Client.DefaultRequestHeaders.Add("Accept", "application/json");
             Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {oauthToken}");
         }
 
-        public async Task<string> GetYandexDiskUploadLinkAsync(string yandexDiskDirectoryPath, string filename)
+        public async Task<string> GetUploadLinkAsync(string uploadDirectoryPath, string filename)
         {
-            string uploadPath = Path.Combine("resources/upload?path=", yandexDiskDirectoryPath, filename);
+            string uploadPath = Path.Combine("resources/upload?path=", uploadDirectoryPath, filename);
 
             HttpResponseMessage responseMessage = await Client.GetAsync(uploadPath);
             responseMessage.EnsureSuccessStatusCode();
@@ -36,16 +36,17 @@ namespace YandexDiskFileUploader.Implementations
             return response.Link;
         }
 
-        public async Task UploadFileAsync(string uploadUri, byte[] fileBytes)
+        /// <inheritdoc />
+        public async Task UploadFileAsync(string uploadLink, byte[] fileBytes)
         {
-            if(string.IsNullOrEmpty(uploadUri))
-                throw new ArgumentNullException(uploadUri);
+            if(string.IsNullOrEmpty(uploadLink))
+                throw new ArgumentNullException(uploadLink);
             
             if (fileBytes.Length == 0)
                 throw new ArgumentException("Upload file size in bytes must be greater than 0.");
                     
             HttpResponseMessage uploadResponse =
-                await Client.PutAsync(uploadUri, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
+                await Client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
             
             uploadResponse.EnsureSuccessStatusCode();
         }
