@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Backuper.FileReader;
 using Microsoft.Extensions.Hosting;
+using YandexDiskFileUploader.FileReader;
 
-namespace Backuper
+namespace YandexDiskFileUploader
 {
     class Program
     {

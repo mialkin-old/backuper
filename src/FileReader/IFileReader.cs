@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Backuper.FileReader
+namespace YandexDiskFileUploader.FileReader
 {
     public interface IFileReader
     {
