@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using YandexDiskFileUploader.Implementations;
 using YandexDiskFileUploader.Interfaces;
+using YandexDiskFileUploader.Utils;
 
 namespace YandexDiskFileUploader
 {
@@ -17,7 +18,7 @@ namespace YandexDiskFileUploader
 
             EnvironmentVariables env = new();
 
-            IFileReader fileReader = new FileReader();
+            IFileReader fileReader = new DefaultFileReader();
 
             byte[] fileBytes = await fileReader.ReadFileAsync(Path.Combine(env.SourceFileFolderPath, env.SourceFileName));
 

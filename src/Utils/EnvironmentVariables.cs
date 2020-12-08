@@ -1,6 +1,6 @@
 using System;
 
-namespace YandexDiskFileUploader
+namespace YandexDiskFileUploader.Utils
 {
     public class EnvironmentVariables
     {

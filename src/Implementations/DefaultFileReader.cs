@@ -5,7 +5,7 @@ using YandexDiskFileUploader.Interfaces;
 
 namespace YandexDiskFileUploader.Implementations
 {
-    public class FileReader : IFileReader
+    public class DefaultFileReader : IFileReader
     {
         public async Task<byte[]> ReadFileAsync(string filePath)
         {
