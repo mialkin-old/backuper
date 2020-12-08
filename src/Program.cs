@@ -19,9 +19,9 @@ namespace YandexDiskFileUploader
 
             IFileReader fileReader = new FileReader();
 
-            byte[] fileBytes = await fileReader.ReadFileAsync(Path.Combine(env.SourceFolderPath, env.SourceFileName));
+            byte[] fileBytes = await fileReader.ReadFileAsync(Path.Combine(env.SourceFileFolderPath, env.SourceFileName));
 
-            IYandexDiskFileUploader yandexDiskFileUploader = new DefaultFileUploader(env.OauthToken);
+            IYandexDiskFileUploader yandexDiskFileUploader = new DefaultFileUploader(env.YandexAppOauthToken);
 
             Print("Start getting upload link.");
             string uploadLink = await yandexDiskFileUploader.GetUploadLinkAsync(env.UploadDirectoryPath,

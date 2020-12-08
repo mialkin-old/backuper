@@ -5,14 +5,14 @@ namespace YandexDiskFileUploader
     public class EnvironmentVariables
     {
         /// <summary>
-        /// OAuth token from the <see href="https://oauth.yandex.com">application</see> registered on Yandex's OAuth server.
+        /// OAuth token from the application registered on Yandex's OAuth server. <see href="https://oauth.yandex.com"/>
         /// </summary>
-        public string OauthToken { get; } = Get("OAUTH_TOKEN");
+        public string YandexAppOauthToken { get; } = Get("OAUTH_TOKEN");
 
         /// <summary>
         /// Path to the directory with the file to upload.
         /// </summary>
-        public string SourceFolderPath { get; set; } = Get("SOURCE_FOLDER_PATH");
+        public string SourceFileFolderPath { get; set; } = Get("SOURCE_FOLDER_PATH");
 
         /// <summary>
         /// Name of the file to upload.
