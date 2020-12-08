@@ -10,8 +10,6 @@ namespace YandexDiskFileUploader
 {
     class Program
     {
-        public string OperationId { get; } = Guid.NewGuid().ToString()[^4..];
-
         static async Task Main(string[] args)
         {
             using IHost host = CreateHostBuilder(args).Build();
