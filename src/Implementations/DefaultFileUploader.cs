@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using YandexDiskFileUploader.Interfaces;
 using YandexDiskFileUploader.Utils;
 
@@ -15,10 +16,10 @@ namespace YandexDiskFileUploader.Implementations
             BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/")
         };
 
-        public DefaultFileUploader(string oauthToken)
+        public DefaultFileUploader(IOptions<YaDiskOptions> options)
         {
             Client.DefaultRequestHeaders.Add("Accept", "application/json");
-            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {oauthToken}");
+            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {options.Value.YandexAppOauthToken}");
         }
 
         public async Task<string> GetUploadLinkAsync(string uploadDirectoryPath, string filename)
@@ -37,18 +38,17 @@ namespace YandexDiskFileUploader.Implementations
             return response.Link;
         }
 
-        /// <inheritdoc />
         public async Task UploadFileAsync(string uploadLink, byte[] fileBytes)
         {
-            if(string.IsNullOrEmpty(uploadLink))
+            if (string.IsNullOrEmpty(uploadLink))
                 throw new ArgumentNullException(uploadLink);
-            
+
             if (fileBytes.Length == 0)
                 throw new ArgumentException("Upload file size in bytes must be greater than 0.");
-                    
+
             HttpResponseMessage uploadResponse =
                 await Client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
-            
+
             uploadResponse.EnsureSuccessStatusCode();
         }
     }
