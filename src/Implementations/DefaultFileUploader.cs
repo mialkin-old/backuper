@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using YandexDiskFileUploader.Interfaces;
+using YandexDiskFileUploader.Options;
 using YandexDiskFileUploader.Utils;
 
 namespace YandexDiskFileUploader.Implementations
@@ -16,10 +17,10 @@ namespace YandexDiskFileUploader.Implementations
             BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/")
         };
 
-        public DefaultFileUploader(IOptions<YaDiskOptions> options)
+        public DefaultFileUploader(IOptions<FileUploaderOptions> options)
         {
             Client.DefaultRequestHeaders.Add("Accept", "application/json");
-            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {options.Value.YandexAppOauthToken}");
+            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {options.Value.OAuthToken}");
         }
 
         public async Task<string> GetUploadLinkAsync(string uploadDirectoryPath, string filename)

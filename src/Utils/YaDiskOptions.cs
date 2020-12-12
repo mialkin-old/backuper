@@ -4,6 +4,9 @@ namespace YandexDiskFileUploader.Utils
 {
     public class YaDiskOptions
     {
+        // TODO make YaDiskOptions properties notnull with attributes
+
+        
         /// <summary>
         /// OAuth token from the application registered on Yandex's OAuth server. <see href="https://oauth.yandex.com"/>
         /// </summary>
