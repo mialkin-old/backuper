@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using YandexDiskFileUploader.Settings;
+using Slova.Backuper.Settings;
 
-namespace YandexDiskFileUploader.FileUploader
+namespace Slova.Backuper.FileUploader
 {
     public class FileUploader : IFileUploader
     {

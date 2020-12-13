@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace YandexDiskFileUploader.Settings
+namespace Slova.Backuper.Settings
 {
     public class FileUploaderSettings
     {

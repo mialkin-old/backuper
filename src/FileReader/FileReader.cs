@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using YandexDiskFileUploader.Settings;
+using Slova.Backuper.Settings;
 
-namespace YandexDiskFileUploader.FileReader
+namespace Slova.Backuper.FileReader
 {
     public class FileReader : IFileReader
     {

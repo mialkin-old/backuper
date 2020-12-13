@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace YandexDiskFileUploader.FileReader
+namespace Slova.Backuper.FileReader
 {
     public interface IFileReader
     {

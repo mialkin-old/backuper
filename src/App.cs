@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using YandexDiskFileUploader.FileReader;
-using YandexDiskFileUploader.FileUploader;
+using Slova.Backuper.FileReader;
+using Slova.Backuper.FileUploader;
 
-namespace YandexDiskFileUploader
+namespace Slova.Backuper
 {
     public class App
     {

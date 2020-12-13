@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace YandexDiskFileUploader.FileUploader
+namespace Slova.Backuper.FileUploader
 {
     public class Response
     {

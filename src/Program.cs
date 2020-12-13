@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using YandexDiskFileUploader.FileReader;
-using YandexDiskFileUploader.FileUploader;
-using YandexDiskFileUploader.Settings;
+using Slova.Backuper.FileReader;
+using Slova.Backuper.FileUploader;
+using Slova.Backuper.Settings;
 
-namespace YandexDiskFileUploader
+namespace Slova.Backuper
 {
     class Program
     {
