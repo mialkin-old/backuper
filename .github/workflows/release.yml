@@ -24,10 +24,10 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v2
         with:
-          tags: slova/backuper:latest
+          tags: mialkin/backuper:latest
 
       - name: Push image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: slova/backuper:latest
+          tags: mialkin/backuper:latest
