@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace YandexDiskFileUploader.Utils
 {
-    public class YandexDiskResponse
+    public class Response
     {
         [JsonPropertyName("href")]
         public string? Link { get; set; }

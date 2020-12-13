@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using YandexDiskFileUploader.Implementations;
 using YandexDiskFileUploader.Interfaces;
 using YandexDiskFileUploader.Options;
+using YandexDiskFileUploader.Settings;
 
 namespace YandexDiskFileUploader
 {
@@ -14,31 +15,26 @@ namespace YandexDiskFileUploader
         {
             using IHost host = CreateHostBuilder(args).Build();
 
-            BackupRunner backupRunner = host.Services.GetRequiredService<BackupRunner>();
-            await backupRunner.Run();
+            App app = host.Services.GetRequiredService<App>();
+            await app.Run();
 
             await host.RunAsync();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.Development.json", 
-                            optional: true, reloadOnChange: true);
-
-                })
+            Host
+                .CreateDefaultBuilder(args)
                 .ConfigureServices((context, serviceCollection) =>
                 {
                     serviceCollection
-                        .AddTransient<IFileReader, DefaultFileReader>()
-                        .AddTransient<IYandexDiskFileUploader, DefaultFileUploader>()
-                        .AddTransient<BackupRunner>();
+                        .AddTransient<IFileReader, FileReader>()
+                        .AddTransient<IFileUploader, FileUploader>()
+                        .AddTransient<App>();
 
-                    IConfigurationSection section = context.Configuration.GetSection("BackupRunner");
+                    //IConfigurationSection section = context.Configuration.GetSection("OAuthToken");
 
-                    serviceCollection.Configure<BackupRunnerOptions>(section);
+                    serviceCollection.Configure<FileReaderSettings>(context.Configuration.GetSection(FileReaderSettings.App));
+                    serviceCollection.Configure<FileUploaderSettings>(context.Configuration.GetSection("Slova"));
                 });
     }
 }

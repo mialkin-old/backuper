@@ -4,29 +4,29 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using YandexDiskFileUploader.Interfaces;
 using YandexDiskFileUploader.Options;
+using YandexDiskFileUploader.Settings;
 
 namespace YandexDiskFileUploader
 {
-    public class BackupRunner
+    public class App
     {
         private readonly IFileReader _fileReader;
-        private readonly IYandexDiskFileUploader _fileUploader;
-        private readonly BackupRunnerOptions _options;
+        private readonly IFileUploader _fileUploader;
+        private readonly FileReaderSettings _fileReaderSettings;
 
-        public BackupRunner(IFileReader fileReader, IYandexDiskFileUploader fileUploader, IOptions<BackupRunnerOptions> options)
+        public App(IFileReader fileReader, IFileUploader fileUploader, IOptions<FileReaderSettings> options)
         {
             _fileReader = fileReader;
             _fileUploader = fileUploader;
-            _options = options.Value;
+            _fileReaderSettings = options.Value;
         }
 
         public async Task Run()
         {
-            byte[] fileBytes = await _fileReader.ReadFileAsync(Path.Combine(_options.SourceFileDirectoryPath, _options.SourceFileName));
+            byte[] fileBytes = await _fileReader.ReadFileAsync(Path.Combine(_fileReaderSettings.FileDirectory, _fileReaderSettings.FileName));
             
             Print("Start getting upload link.");
-            string uploadLink = await _fileUploader.GetUploadLinkAsync(_options.UploadDirectoryPath,
-                $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_options.SourceFileName}");
+            string uploadLink = await _fileUploader.GetUploadLinkAsync($"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_fileReaderSettings.FileName}");
             Print("Upload link has been received.");
             
             Print("Start uploading file.");
