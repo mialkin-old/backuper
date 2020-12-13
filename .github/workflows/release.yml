@@ -21,9 +21,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
-      - name: Build and push
-        id: docker_build
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          tags: slova/backuper:latest
+
+      - name: Push image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: mialkin/slova.backuper:latest
+          tags: slova/backuper:latest
