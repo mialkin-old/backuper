@@ -8,6 +8,16 @@ jobs:
   login:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ghcr.io/gbaeke/rgapi
+          tag-sha: true
+          tag-edge: false
+          tag-latest: true
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -24,10 +34,12 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v2
         with:
-          tags: mialkin/backuper:latest
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          file: ./Dockerfile
 
       - name: Push image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: mialkin/backuper:latest
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          file: ./Dockerfile
