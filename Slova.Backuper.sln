@@ -10,7 +10,7 @@ ProjectSection(SolutionItems) = preProject
 	readme.md = readme.md
 	.dockerignore = .dockerignore
 	Dockerfile = Dockerfile
-	.github\workflows\dotnet-core.yml = .github\workflows\dotnet-core.yml
+	.github\workflows\build-test.yml = .github\workflows\build-test.yml
 EndProjectSection
 EndProject
 Global
