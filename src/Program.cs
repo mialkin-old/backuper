@@ -25,10 +25,7 @@ namespace Slova.Backuper
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, builder) =>
-                {
-                    builder.AddEnvironmentVariables(prefix: "SLOVA_BACKUPER_");
-                })
+                .ConfigureAppConfiguration((context, builder) => { builder.AddEnvironmentVariables(prefix: "SLOVA_BACKUPER_"); })
                 .ConfigureServices((context, serviceCollection) =>
                 {
                     serviceCollection
@@ -39,7 +36,6 @@ namespace Slova.Backuper
 
                     serviceCollection.AddOptions<FileReaderSettings>().Bind(context.Configuration.GetSection(FileReaderSettings.FileReader))
                         .ValidateDataAnnotations();
-
                     serviceCollection.AddOptions<FileUploaderSettings>().Bind(context.Configuration.GetSection(FileUploaderSettings.FileUploader))
                         .ValidateDataAnnotations();
                 });
