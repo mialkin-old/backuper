@@ -34,6 +34,6 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: mialkin/Slova.Backuper/backuper
+        repository: mialkin/slova/backuper
         tag_with_ref: true
         #dockerfile: Dockerfile
