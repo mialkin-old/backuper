@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
 
-namespace YandexDiskFileUploader.Interfaces
+namespace YandexDiskFileUploader.FileUploader
 {
     public interface IFileUploader
     {
         /// <summary>
         /// Requests upload link from Yandex.Disk.
         /// </summary>
-        /// <param name="filename">Name which uploaded file will have on Yandex.Disk.</param>
         /// <returns>Upload link</returns>
-        public Task<string> GetUploadLinkAsync(string filename);
+        public Task<string> GetUploadLinkAsync();
 
         /// <summary>
         /// Uploads file to Yandex.Disk.

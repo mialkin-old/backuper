@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace YandexDiskFileUploader.Utils
+namespace YandexDiskFileUploader.FileUploader
 {
     public class Response
     {

@@ -4,34 +4,30 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using YandexDiskFileUploader.Interfaces;
-using YandexDiskFileUploader.Options;
-using YandexDiskFileUploader.Utils;
+using YandexDiskFileUploader.Settings;
 
-namespace YandexDiskFileUploader.Implementations
+namespace YandexDiskFileUploader.FileUploader
 {
     public class FileUploader : IFileUploader
     {
         private readonly FileUploaderSettings _fileUploaderSettings;
+        private readonly HttpClient _client;
 
-        private static readonly HttpClient Client = new()
+        public FileUploader(HttpClient client, IOptions<FileUploaderSettings> options)
         {
-            BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/")
-        };
-
-        public FileUploader(IOptions<FileUploaderSettings> options)
-        {
+            _client = client;
             _fileUploaderSettings = options.Value;
-            
-            Client.DefaultRequestHeaders.Add("Accept", "application/json");
-            Client.DefaultRequestHeaders.Add("Authorization", $"OAuth {_fileUploaderSettings.OAuthToken}");
+
+            _client.DefaultRequestHeaders.Add("Accept", "application/json");
+            _client.DefaultRequestHeaders.Add("Authorization", $"OAuth {_fileUploaderSettings.OAuthToken}");
         }
 
-        public async Task<string> GetUploadLinkAsync(string filename)
+        public async Task<string> GetUploadLinkAsync()
         {
-            string uploadPath = Path.Combine("resources/upload?path=", _fileUploaderSettings.UploadDirectory, filename);
+            string uploadPath = "resources/upload?path=" + Path.Combine(_fileUploaderSettings.UploadDirectory,
+                $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_fileUploaderSettings.FileName}");
 
-            HttpResponseMessage responseMessage = await Client.GetAsync(uploadPath);
+            HttpResponseMessage responseMessage = await _client.GetAsync(uploadPath);
             responseMessage.EnsureSuccessStatusCode();
 
             string jsonString = await responseMessage.Content.ReadAsStringAsync();
@@ -52,7 +48,7 @@ namespace YandexDiskFileUploader.Implementations
                 throw new ArgumentException("Upload file size in bytes must be greater than 0.");
 
             HttpResponseMessage uploadResponse =
-                await Client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
+                await _client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
 
             uploadResponse.EnsureSuccessStatusCode();
         }
