@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,14 +21,22 @@ namespace Slova.Backuper
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             await serviceProvider.GetService<App>()!.Run();
         }
-        
+
         private static void ConfigureServices(ServiceCollection services)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables("SLOVA_BACKUPER_")
                 .Build();
 
-            services.AddLogging(x => x.AddConsole());
+            services.AddLogging(x => x.AddJsonConsole(options =>
+            {
+                options.IncludeScopes = false;
+                options.TimestampFormat = "hh:mm:ss ";
+                options.JsonWriterOptions = new JsonWriterOptions
+                {
+                    Indented = true
+                };
+            }));
 
             services
                 .AddSingleton(new HttpClient { BaseAddress = new Uri("https://cloud-api.yandex.net/v1/disk/") })
