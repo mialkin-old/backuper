@@ -27,23 +27,24 @@ namespace Slova.Backuper.FileUploader
 
         public async Task<string> GetUploadLinkAsync()
         {
-            _logger.LogInformation("Start getting upload link.");
             string uploadPath = "resources/upload?path=" + Path.Combine(_fileUploaderSettings.UploadDirectory,
                 $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_fileUploaderSettings.FileName}");
 
-            _logger.LogInformation("Upload link path: {0}", uploadPath);
+            _logger.LogInformation("Start getting upload link for upload path {0}", uploadPath);
             HttpResponseMessage responseMessage = await _client.GetAsync(uploadPath);
+
             _logger.LogInformation("Received Yandex.Disk server response: {0}", responseMessage);
             responseMessage.EnsureSuccessStatusCode();
+
             _logger.LogInformation("Start deserializing response.");
             string jsonString = await responseMessage.Content.ReadAsStringAsync();
             Response? response = JsonSerializer.Deserialize<Response>(jsonString);
-            _logger.LogInformation("Response successfully deserialized: {0}", jsonString);
+            _logger.LogInformation("Deserialized response: {0}", jsonString);
 
             if (string.IsNullOrEmpty(response?.Link))
                 throw new ArgumentNullException(nameof(response.Link));
 
-            _logger.LogInformation("Upload link has been successfully received: {0}", response.Link);
+            _logger.LogInformation("Upload link has been received: {0}", response.Link);
             return response.Link;
         }
 
@@ -63,8 +64,8 @@ namespace Slova.Backuper.FileUploader
             HttpResponseMessage uploadResponse =
                 await _client.PutAsync(uploadLink, new ByteArrayContent(fileBytes, 0, fileBytes.Length));
             _logger.LogInformation("Finish uploading file.");
-            uploadResponse.EnsureSuccessStatusCode();
 
+            uploadResponse.EnsureSuccessStatusCode();
             _logger.LogInformation("File has been successfully uploaded.");
         }
     }

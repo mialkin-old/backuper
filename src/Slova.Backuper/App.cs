@@ -20,13 +20,13 @@ namespace Slova.Backuper
 
         public async Task Run()
         {
-            _logger.LogInformation("Start backup. 🚀");
+            _logger.LogInformation("🚀 Backup is started.");
 
             byte[] fileBytes = await _fileReader.ReadFileAsync();
             string uploadLink = await _fileUploader.GetUploadLinkAsync();
             await _fileUploader.UploadFileAsync(uploadLink, fileBytes);
             
-            _logger.LogInformation("Backup is finished. 🏁");
+            _logger.LogInformation("🏁 Backup is finished.");
         }
     }
 }
