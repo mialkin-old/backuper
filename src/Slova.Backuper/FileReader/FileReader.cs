@@ -1,6 +1,6 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slova.Backuper.Settings;
 
@@ -8,29 +8,26 @@ namespace Slova.Backuper.FileReader
 {
     public class FileReader : IFileReader
     {
+        private readonly ILogger<FileReader> _logger;
         private readonly FileReaderSettings _fileReaderSettings;
 
-        public FileReader(IOptions<FileReaderSettings> fileReaderSettings)
+        public FileReader(IOptions<FileReaderSettings> fileReaderSettings, ILogger<FileReader> logger)
         {
             _fileReaderSettings = fileReaderSettings.Value;
+            _logger = logger;
         }
+
         public async Task<byte[]> ReadFileAsync()
         {
-            Print("Start backup.");
-            Print("Start reading file from disk.");
-            byte[] fileBytes = await File.ReadAllBytesAsync(Path.Combine(_fileReaderSettings.FileDirectory, _fileReaderSettings.FileName));
+            _logger.LogInformation("Start reading file from disk");
+            string path = Path.Combine(_fileReaderSettings.FileDirectory, _fileReaderSettings.FileName);   
+            _logger.LogInformation("File path is {0}", path);
+
+            byte[] fileBytes = await File.ReadAllBytesAsync(path);
             
-            if (fileBytes.Length == 0)
-                throw new Exception("File size is null.");
-            
-            Print($"File has been read. File size: {fileBytes.Length / 1024} KB.");
+            _logger.LogInformation($"File has been read. File size is {fileBytes.Length / 1024} KB ({fileBytes.Length} bytes).");
 
             return fileBytes;
-        }
-
-        private static void Print(string message)
-        {
-            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} — {message}");
         }
     }
 }
