@@ -12,7 +12,7 @@
 
 2\. Создайте новую папку `slova.backuper` и сохраните внутри нее файл `docker-compose.yml` со следующим содержимым:
 
-```text
+```yml
 version: "3.8"
 services:
   backuper:
@@ -32,7 +32,7 @@ services:
 
 Пример:
 
-```text
+```yml
 version: "3.8"
 services:
   backuper:
@@ -69,7 +69,6 @@ docker ps -a
 CONTAINER ID   IMAGE                   COMMAND                  CREATED          STATUS                      PORTS                    NAMES
 bd89b003e4e7   slova/backuper:latest   "bash"                   17 seconds ago   Up 16 seconds                                        slova.backuper
 ```
-
 
 5\. Запустите резервное копирование:
 
