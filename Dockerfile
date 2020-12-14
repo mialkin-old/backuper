@@ -8,5 +8,3 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 
 COPY --from=build /app/out /app
 WORKDIR /app
-
-ENTRYPOINT ["dotnet", "Slova.Backuper.dll"]
