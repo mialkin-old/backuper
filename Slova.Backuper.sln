@@ -10,8 +10,8 @@ ProjectSection(SolutionItems) = preProject
 	readme.md = readme.md
 	.dockerignore = .dockerignore
 	Dockerfile = Dockerfile
-	.github\workflows\build-test.yml = .github\workflows\build-test.yml
 	.github\workflows\release.yml = .github\workflows\release.yml
+	.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 EndProjectSection
 EndProject
 Global
