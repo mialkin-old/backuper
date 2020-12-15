@@ -75,3 +75,9 @@ bd89b003e4e7   slova/backuper:latest   "bash"                   17 seconds ago  
 ```bash
 docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ```
+
+## Cron-задачи
+
+```
+00 00 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll >> /home/aleksei/cron.log
+```
