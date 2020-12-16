@@ -94,7 +94,7 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 [16:44:34 INF] Application is terminating.
 ```
 
-Во текстовом файле данные сохраняются в JSON-формате:
+В текстовом файле данные сохраняются в JSON-формате:
 
 ```log
 {"Timestamp":"2020-12-16T16:44:12.8233883+00:00","Level":"Information","MessageTemplate":"Application is starting."}
@@ -114,3 +114,5 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ```
 0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll >> /home/username/slova.backuper.log
 ```
+
+В примере выше операцию журналирования, то есть `>> /home/username/slova.backuper.log`, можно не добавлять, так как журналирование в любом случае производится в файл `logs/logYYYYMM.log`. Но в файле `logs/logYYYYMM.log` записи хранятся в формате менее удобном для чтения человеком, и предназначены для отправки в [↑ ELK](https://www.elastic.co/what-is/elk-stack) c помощью [↑ Beats](https://www.elastic.co/beats).
