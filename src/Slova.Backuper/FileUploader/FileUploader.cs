@@ -58,11 +58,7 @@ namespace Slova.Backuper.FileUploader
             _logger.LogInformation("Upload file size is {bytes} bytes.", fileBytes.Length);
 
             if (fileBytes.Length == 0)
-            {
-                string error = "Upload file size in bytes must be greater than 0";
-                _logger.LogError(error);
-                throw new ArgumentException(error);
-            }
+                throw new ArgumentException("Upload file size in bytes must be greater than 0.");
 
             _logger.LogInformation("Start uploading file.");
             HttpResponseMessage uploadResponse =

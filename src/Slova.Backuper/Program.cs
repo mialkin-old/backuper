@@ -18,12 +18,9 @@ namespace Slova.Backuper
 
             IConfigurationRoot configurationRoot = builder.Build();
 
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configurationRoot)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File(new JsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
-                .CreateLogger();
+            Log.Logger = SetupLogger(configurationRoot);
+
+            SetupUnhandledExceptionsHandler(Log.Logger);
 
             Log.Logger.Information("Application is starting.");
 
@@ -36,6 +33,25 @@ namespace Slova.Backuper
             await app.Run();
 
             Log.Logger.Information("Application is stopping.");
+        }
+
+        private static void SetupUnhandledExceptionsHandler(ILogger logger)
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            {
+                logger.Error("Application is terminating because of the unhandled exception: {exception}", eventArgs.ExceptionObject);
+                Environment.Exit(1);
+            };
+        }
+
+        private static ILogger SetupLogger(IConfigurationRoot configurationRoot)
+        {
+            return new LoggerConfiguration()
+                .ReadFrom.Configuration(configurationRoot)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File(new JsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
+                .CreateLogger();
         }
 
         static void BuildConfig(IConfigurationBuilder builder)
