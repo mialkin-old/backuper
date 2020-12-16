@@ -76,8 +76,11 @@ bd89b003e4e7   slova/backuper:latest   "bash"                   17 seconds ago  
 docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ```
 
-## Cron-задачи
+## Автоматизация копирования с помощью cron
+
+Запуск резервного копирования можно автоматизировать с помощью [↑ cron](https://en.wikipedia.org/wiki/Cron). Например, следующая cron-задача будет
+запускать копирование файла 1 раз в сутки в полночь:
 
 ```
-00 00 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll >> /home/aleksei/cron.log
+0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll
 ```
