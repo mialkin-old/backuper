@@ -20,7 +20,7 @@ services:
     image: slova/backuper:latest
     volumes:
       - <Путь до папки с исходным файлом на хосте>:<Путь до папки с файлом внутри контейнера>
-      - ./logs:/logs
+      - ./logs:/app/logs
     environment:
       - SLOVA_BACKUPER_FileReader__FileDirectory=<Путь до папки с файлом внутри контейнера>
       - SLOVA_BACKUPER_FileReader__FileName=<Имя исходного файла>
@@ -40,10 +40,10 @@ services:
     restart: always
     image: slova/backuper:latest
     volumes:
-      - /var/opt/database-dumps:/backups
-      - ./logs:/logs
+      - /var/opt/database-dumps:/app/backups
+      - ./logs:/app/logs
     environment:
-      - SLOVA_BACKUPER_FileReader__FileDirectory=/backups
+      - SLOVA_BACKUPER_FileReader__FileDirectory=/app/backups
       - SLOVA_BACKUPER_FileReader__FileName=database.bak
       - SLOVA_BACKUPER_FileUploader__OAuthToken=ypCDuFoMZC8A7upAFS63nvrH0XYiIJGOxd6W660
       - SLOVA_BACKUPER_FileUploader__UploadDirectory=Backups
@@ -78,11 +78,39 @@ bd89b003e4e7   slova/backuper:latest   "bash"                   17 seconds ago  
 docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ```
 
-## Автоматизация копирования с помощью cron
+## Журналирование
+
+Во время работы программы журналирование производится одновременно в стандартный поток вывода и в текстовый файл вида `logs/logYYYYMM.log`.
+
+В стандартный поток вывода данные выводятся в формате:
+
+```log
+[16:44:12 INF] Application is starting.
+[16:44:13 INF] 🚀 Starting backup.
+[16:44:13 INF] Start reading file from disk.
+...
+...
+[16:44:34 INF] 🏁 Backup is done.
+[16:44:34 INF] Application is terminating.
+```
+
+Во текстовом файле данные сохраняются в JSON-формате:
+
+```log
+{"Timestamp":"2020-12-16T16:44:12.8233883+00:00","Level":"Information","MessageTemplate":"Application is starting."}
+{"Timestamp":"2020-12-16T16:44:13.6285087+00:00","Level":"Information","MessageTemplate":"🚀 Starting backup.","Properties":{"SourceContext":"Slova.Backuper.App"}}
+{"Timestamp":"2020-12-16T16:44:13.6318040+00:00","Level":"Information","MessageTemplate":"Start reading file from disk.","Properties":{"SourceContext":"Slova.Backuper.FileReader.FileReader"}}
+...
+...
+{"Timestamp":"2020-12-16T16:44:34.1268946+00:00","Level":"Information","MessageTemplate":"🏁 Backup is done.","Properties":{"SourceContext":"Slova.Backuper.App"}}
+{"Timestamp":"2020-12-16T16:44:34.1275939+00:00","Level":"Information","MessageTemplate":"Application is terminating."}
+```
+
+## Автоматизация запуска копирования с помощью cron
 
 Запуск резервного копирования можно автоматизировать с помощью [↑ cron](https://en.wikipedia.org/wiki/Cron). Например, следующая cron-задача будет
-запускать копирование файла 1 раз в сутки в полночь:
+запускать копирование файла 1 раз в сутки в полночь и журналировать стандартный поток вывода в текстовый файл:
 
 ```
-0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll
+0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll >> /home/username/slova.backuper.log
 ```
