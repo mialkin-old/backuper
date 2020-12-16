@@ -25,6 +25,7 @@ namespace Slova.Backuper
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configurationRoot)
                 .Enrich.FromLogContext()
+                .WriteTo.Console()
                 .WriteTo.File(new JsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
                 .CreateLogger();
 
