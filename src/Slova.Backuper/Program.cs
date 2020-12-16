@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Formatting.Json;
 using Slova.Backuper.FileReader;
 using Slova.Backuper.FileUploader;
 using Slova.Backuper.Settings;
@@ -24,7 +25,7 @@ namespace Slova.Backuper
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configurationRoot)
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
+                .WriteTo.File(new JsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
                 .CreateLogger();
 
             Log.Logger.Information("Application is starting.");
@@ -49,7 +50,7 @@ namespace Slova.Backuper
 
             App app = ActivatorUtilities.CreateInstance<App>(host.Services);
             await app.Run();
-            
+
             Log.Logger.Information("Application is terminating.");
         }
 

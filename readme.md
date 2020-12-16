@@ -20,6 +20,7 @@ services:
     image: slova/backuper:latest
     volumes:
       - <Путь до папки с исходным файлом на хосте>:<Путь до папки с файлом внутри контейнера>
+      - ./logs:/logs
     environment:
       - SLOVA_BACKUPER_FileReader__FileDirectory=<Путь до папки с файлом внутри контейнера>
       - SLOVA_BACKUPER_FileReader__FileName=<Имя исходного файла>
@@ -39,9 +40,10 @@ services:
     restart: always
     image: slova/backuper:latest
     volumes:
-      - /var/opt/database-dumps:/slova.backups
+      - /var/opt/database-dumps:/backups
+      - ./logs:/logs
     environment:
-      - SLOVA_BACKUPER_FileReader__FileDirectory=/slova.backups
+      - SLOVA_BACKUPER_FileReader__FileDirectory=/backups
       - SLOVA_BACKUPER_FileReader__FileName=database.bak
       - SLOVA_BACKUPER_FileUploader__OAuthToken=ypCDuFoMZC8A7upAFS63nvrH0XYiIJGOxd6W660
       - SLOVA_BACKUPER_FileUploader__UploadDirectory=Backups
