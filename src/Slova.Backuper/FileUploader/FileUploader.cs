@@ -30,35 +30,39 @@ namespace Slova.Backuper.FileUploader
             string uploadPath = "resources/upload?path=" + Path.Combine(_fileUploaderSettings.UploadDirectory,
                 $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {_fileUploaderSettings.FileName}");
 
-            _logger.LogInformation("Start getting upload link for upload path {0}", uploadPath);
+            _logger.LogInformation("Start getting upload link for upload path {uploadPath}.", uploadPath);
             HttpResponseMessage responseMessage = await _client.GetAsync(uploadPath);
 
-            _logger.LogInformation("Received Yandex.Disk server response: {0}", responseMessage);
+            _logger.LogInformation("Received Yandex.Disk server response: {responseMessage}.", responseMessage);
             responseMessage.EnsureSuccessStatusCode();
 
             _logger.LogInformation("Start deserializing response.");
             string jsonString = await responseMessage.Content.ReadAsStringAsync();
             Response? response = JsonSerializer.Deserialize<Response>(jsonString);
-            _logger.LogInformation("Deserialized response: {0}", jsonString);
+            _logger.LogInformation("Deserialized response: {jsonString}.", jsonString);
 
             if (string.IsNullOrEmpty(response?.Link))
                 throw new ArgumentNullException(nameof(response.Link));
 
-            _logger.LogInformation("Upload link has been received: {0}", response.Link);
+            _logger.LogInformation("Upload link has been received: {responseLink}.", response.Link);
             return response.Link;
         }
 
         public async Task UploadFileAsync(string uploadLink, byte[] fileBytes)
         {
-            _logger.LogInformation("Prepare uploading file with upload link: {0}.", uploadLink);
+            _logger.LogInformation("Prepare uploading file with upload link: {uploadLink}.", uploadLink);
 
             if (string.IsNullOrEmpty(uploadLink))
                 throw new ArgumentNullException(uploadLink);
 
-            _logger.LogInformation($"Upload file size is {fileBytes.Length} bytes.");
+            _logger.LogInformation("Upload file size is {bytes} bytes.", fileBytes.Length);
 
             if (fileBytes.Length == 0)
-                throw new ArgumentException("Upload file size in bytes must be greater than 0.");
+            {
+                string error = "Upload file size in bytes must be greater than 0";
+                _logger.LogError(error);
+                throw new ArgumentException(error);
+            }
 
             _logger.LogInformation("Start uploading file.");
             HttpResponseMessage uploadResponse =

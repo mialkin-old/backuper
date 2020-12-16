@@ -7,18 +7,18 @@ namespace Slova.Backuper.Settings
         public const string FileUploader = "FileUploader";
 
         [Required(AllowEmptyStrings = false)]
-        public string OAuthToken { get; set; }
+        public string OAuthToken { get; set; } = null!;
         
         /// <summary>
         /// Path to upload directory on Yandex.Disk.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
-        public string UploadDirectory { get; set; }
+        public string UploadDirectory { get; set; } = null!;
         
         /// <summary>
         /// Name of the file to upload.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
-        public string FileName { get; set; }
+        public string FileName { get; set; } = null!;
     }
 }

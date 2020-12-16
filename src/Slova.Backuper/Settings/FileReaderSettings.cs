@@ -10,12 +10,12 @@ namespace Slova.Backuper.Settings
         /// Path to the directory with the file to upload.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
-        public string FileDirectory { get; set; }
+        public string FileDirectory { get; set; } = null!;
 
         /// <summary>
         /// Name of the file.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
-        public string FileName { get; set; }
+        public string FileName { get; set; } = null!;
     }
 }

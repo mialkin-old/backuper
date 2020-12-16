@@ -19,12 +19,13 @@ namespace Slova.Backuper.FileReader
 
         public async Task<byte[]> ReadFileAsync()
         {
-            _logger.LogInformation("Start reading file from disk");
+            _logger.LogInformation("Start reading file from disk.");
             string path = Path.Combine(_fileReaderSettings.FileDirectory, _fileReaderSettings.FileName);
-            _logger.LogInformation("File path is {0}", path);
+            _logger.LogInformation("File path is {path}.", path);
 
             byte[] fileBytes = await File.ReadAllBytesAsync(path);
-            _logger.LogInformation($"File has been read. File size is {fileBytes.Length / 1024} KB ({fileBytes.Length} bytes).");
+            _logger.LogInformation("File has been read. File size is {bytes} bytes ({fileSizeInKBytes} KB).", fileBytes.Length,
+                fileBytes.Length / 1024);
 
             return fileBytes;
         }
