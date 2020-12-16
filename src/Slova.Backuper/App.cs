@@ -5,7 +5,7 @@ using Slova.Backuper.FileUploader;
 
 namespace Slova.Backuper
 {
-    public class App
+    public class App : IApp
     {
         private readonly IFileReader _fileReader;
         private readonly IFileUploader _fileUploader;
@@ -25,8 +25,8 @@ namespace Slova.Backuper
             byte[] fileBytes = await _fileReader.ReadFileAsync();
             string uploadLink = await _fileUploader.GetUploadLinkAsync();
             await _fileUploader.UploadFileAsync(uploadLink, fileBytes);
-            
-            _logger.LogInformation("🏁 Backup is done.");
+
+            _logger.LogInformation("🏁 Backup is finished.");
         }
     }
 }
