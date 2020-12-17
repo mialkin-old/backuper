@@ -91,7 +91,7 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ...
 ...
 [16:44:34 INF] 🏁 Backup is done.
-[16:44:34 INF] Application is terminating.
+[16:44:34 INF] Application is stopping.
 ```
 
 В текстовом файле данные сохраняются в JSON-формате:
@@ -103,7 +103,7 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 ...
 ...
 {"Timestamp":"2020-12-16T16:44:34.1268946+00:00","Level":"Information","MessageTemplate":"🏁 Backup is done.","Properties":{"SourceContext":"Slova.Backuper.App"}}
-{"Timestamp":"2020-12-16T16:44:34.1275939+00:00","Level":"Information","MessageTemplate":"Application is terminating."}
+{"Timestamp":"2020-12-16T16:44:34.1275939+00:00","Level":"Information","MessageTemplate":"Application is stopping."}
 ```
 
 ## Автоматизация запуска копирования с помощью cron
