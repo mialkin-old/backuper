@@ -85,25 +85,25 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 В стандартный поток вывода данные выводятся в формате:
 
 ```log
-[16:44:12 INF] Application is starting.
-[16:44:13 INF] 🚀 Starting backup.
-[16:44:13 INF] Start reading file from disk.
+[21:39:07 INF] Application is starting.
+[21:39:08 INF] 🚀 Starting backup.
+[21:39:08 INF] Start reading file from disk.
 ...
 ...
-[16:44:34 INF] 🏁 Backup is done.
-[16:44:34 INF] Application is stopping.
+[21:39:10 INF] 🏁 Backup is finished.
+[21:39:10 INF] Application is stopping.
 ```
 
-В текстовом файле данные сохраняются в JSON-формате:
+В текстовом файле данные сохраняются в JSON-формате для дальнейшей их отправки в [↑ ELK](https://www.elastic.co/what-is/elk-stack) c помощью [↑ Filebeat](https://www.elastic.co/beats/filebeat):
 
 ```log
-{"Timestamp":"2020-12-16T16:44:12.8233883+00:00","Level":"Information","MessageTemplate":"Application is starting."}
-{"Timestamp":"2020-12-16T16:44:13.6285087+00:00","Level":"Information","MessageTemplate":"🚀 Starting backup.","Properties":{"SourceContext":"Slova.Backuper.App"}}
-{"Timestamp":"2020-12-16T16:44:13.6318040+00:00","Level":"Information","MessageTemplate":"Start reading file from disk.","Properties":{"SourceContext":"Slova.Backuper.FileReader.FileReader"}}
+{"@timestamp":"2020-12-19T21:39:07.8387740+03:00","level":"Information","messageTemplate":"Application is starting.","message":"Application is starting.","fields":{"MachineName":"macbook","ServiceName":"Slova.Backuper"}}
+{"@timestamp":"2020-12-19T21:39:08.0961110+03:00","level":"Information","messageTemplate":"🚀 Starting backup.","message":"🚀 Starting backup.","fields":{"SourceContext":"Slova.Backuper.App","MachineName":"macbook","ServiceName":"Slova.Backuper"}}
+{"@timestamp":"2020-12-19T21:39:08.0986890+03:00","level":"Information","messageTemplate":"Start reading file from disk.","message":"Start reading file from disk.","fields":{"SourceContext":"Slova.Backuper.FileReader.FileReader","MachineName":"macbook","ServiceName":"Slova.Backuper"}}
 ...
 ...
-{"Timestamp":"2020-12-16T16:44:34.1268946+00:00","Level":"Information","MessageTemplate":"🏁 Backup is done.","Properties":{"SourceContext":"Slova.Backuper.App"}}
-{"Timestamp":"2020-12-16T16:44:34.1275939+00:00","Level":"Information","MessageTemplate":"Application is stopping."}
+{"@timestamp":"2020-12-19T21:39:10.4724000+03:00","level":"Information","messageTemplate":"🏁 Backup is finished.","message":"🏁 Backup is finished.","fields":{"SourceContext":"Slova.Backuper.App","MachineName":"macbook","ServiceName":"Slova.Backuper"}}
+{"@timestamp":"2020-12-19T21:39:10.4724920+03:00","level":"Information","messageTemplate":"Application is stopping.","message":"Application is stopping.","fields":{"MachineName":"macbook","ServiceName":"Slova.Backuper"}}
 ```
 
 ## Автоматизация запуска копирования с помощью cron
@@ -112,7 +112,5 @@ docker exec -it slova.backuper dotnet Slova.Backuper.dll
 запускать копирование файла 1 раз в сутки в полночь и журналировать стандартный поток вывода в текстовый файл:
 
 ```
-0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll >> /home/username/slova.backuper.log
+0 0 * * * docker exec -t slova.backuper dotnet Slova.Backuper.dll
 ```
-
-В примере выше операцию журналирования, то есть `>> /home/username/slova.backuper.log`, можно не добавлять, так как журналирование в любом случае производится в файл `logs/logYYYYMM.log`. Но в файле `logs/logYYYYMM.log` записи хранятся в формате менее удобном для чтения человеком, и предназначены для отправки в [↑ ELK](https://www.elastic.co/what-is/elk-stack) c помощью [↑ Beats](https://www.elastic.co/beats).
