@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Formatting.Elasticsearch;
 using Serilog.Formatting.Json;
 
 namespace Slova.Backuper
@@ -49,8 +50,10 @@ namespace Slova.Backuper
             return new LoggerConfiguration()
                 .ReadFrom.Configuration(configurationRoot)
                 .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.WithProperty("ServiceName", "Slova.Backuper")
                 .WriteTo.Console()
-                .WriteTo.File(new JsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
+                .WriteTo.File(new ElasticsearchJsonFormatter(), configurationRoot.GetValue<string>("LogFile"), rollingInterval: RollingInterval.Month)
                 .CreateLogger();
         }
 
